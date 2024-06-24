@@ -2,10 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router as api_router
+from app.core import config
 
 
 def get_application():
-    app = FastAPI(title="AI 가상여친", version="1.0.0")
+    app = FastAPI(title=config.PROJECT_NAME, version=config.VERSION)
 
     app.add_middleware(
         CORSMiddleware,
@@ -15,8 +16,9 @@ def get_application():
         allow_headers=["*"],
     )
 
-    app.include_router(api_router, prefix="/api")
+    app.include_router(api_router, prefix=config.API_PREFIX)
 
     return app
+
 
 app = get_application()
