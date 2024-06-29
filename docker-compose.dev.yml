@@ -14,3 +14,14 @@ services:
       - ./server:/server:consistent
     ports:
       - "8000:8000"
+
+  ###########################
+  #   client container
+  ###########################
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile-dev
+    command: npm run dev
+    ports:
+      - "3000:3000"
