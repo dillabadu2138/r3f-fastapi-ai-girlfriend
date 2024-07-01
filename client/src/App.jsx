@@ -5,7 +5,7 @@ import Scene from "./components/Scene";
 
 function App() {
   return (
-    <Canvas camera={{ position: [3, 3, 3], fov: 30 }}>
+    <Canvas camera={{ position: [0, 0, 10], fov: 15 }}>
       <Scene />
       <OrbitControls />
     </Canvas>
