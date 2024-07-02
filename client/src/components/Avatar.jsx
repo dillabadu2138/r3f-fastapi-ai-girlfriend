@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
+import { useControls } from "leva";
 
 export function Avatar(props) {
   const { nodes, materials } = useGLTF("/models/Girlfriend.glb");
@@ -14,6 +15,15 @@ export function Avatar(props) {
 
     return () => actions[animation].fadeOut(0.5);
   }, [animation]);
+
+  // leva UI
+  useControls({
+    애니메이션: {
+      value: animation,
+      options: animations.map((item) => item.name),
+      onChange: (v) => setAnimation(v),
+    },
+  });
 
   return (
     <group {...props} dispose={null} ref={group}>
