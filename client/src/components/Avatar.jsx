@@ -1,10 +1,22 @@
-import React, { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import React, { useRef, useState, useEffect } from "react";
+import { useGLTF, useAnimations } from "@react-three/drei";
 
 export function Avatar(props) {
   const { nodes, materials } = useGLTF("/models/Girlfriend.glb");
+  const { animations } = useGLTF("/models/animations.glb");
+  const group = useRef();
+  const { actions } = useAnimations(animations, group);
+
+  const [animation, setAnimation] = useState("Standing Idle");
+
+  useEffect(() => {
+    actions[animation].reset().fadeIn(0.5).play();
+
+    return () => actions[animation].fadeOut(0.5);
+  }, [animation]);
+
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} ref={group}>
       <primitive object={nodes.Hips} />
       <skinnedMesh
         geometry={nodes.Wolf3D_Hair.geometry}
@@ -68,3 +80,4 @@ export function Avatar(props) {
 }
 
 useGLTF.preload("/models/Girlfriend.glb");
+useGLTF.preload("/models/animations.glb");
