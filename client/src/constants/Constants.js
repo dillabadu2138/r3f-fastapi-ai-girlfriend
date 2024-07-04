@@ -1,0 +1,46 @@
+export const facialExpressions = {
+  default: {},
+  smile: {
+    eyeSquintLeft: 0.45,
+    eyeSquintRight: 0.45,
+    noseSneerLeft: 0.15,
+    noseSneerRight: 0.15,
+    mouthSmileLeft: 0.5,
+    mouthSmileRight: 0.5,
+    jawOpen: 0.3,
+  },
+  happy: {
+    mouthSmileLeft: 0.5,
+    mouthSmileRight: 0.5,
+    cheekPuff: 0.5,
+    cheekSquintLeft: 0.5,
+    cheekSquintRight: 0.5,
+  },
+  sad: {
+    mouthFrownLeft: 1,
+    mouthFrownRight: 1,
+    eyeSquintLeft: 0.7,
+    eyeSquintRight: 0.7,
+    eyeLookDownLeft: 0.6,
+    eyeLookDownRight: 0.6,
+
+    jawForward: 1,
+  },
+  surprised: {
+    eyeWideLeft: 0.5,
+    eyeWideRight: 0.5,
+    jawOpen: 0.5,
+    mouthFunnel: 0.5,
+    browInnerUp: 1,
+  },
+  angry: {
+    noseSneerLeft: 1,
+    noseSneerRight: 1,
+    eyeSquintLeft: 0.33,
+    eyeSquintRight: 0.33,
+    browOuterUpLeft: 1,
+    browOuterUpRight: 1,
+    mouthFrownLeft: 1,
+    mouthFrownRight: 1,
+  },
+};

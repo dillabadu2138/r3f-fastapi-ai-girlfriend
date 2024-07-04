@@ -5,6 +5,8 @@ import { useControls } from "leva";
 
 import { MathUtils } from "three";
 
+import { facialExpressions } from "../constants/Constants";
+
 export function Avatar(props) {
   const { nodes, materials, scene } = useGLTF("/models/Girlfriend.glb");
   const { animations } = useGLTF("/models/animations.glb");
@@ -13,6 +15,7 @@ export function Avatar(props) {
 
   const [animation, setAnimation] = useState("Standing Idle");
   const [blink, setBlink] = useState(false);
+  const [facialExpression, setFacialExpression] = useState("default");
 
   const lerpMorphTarget = (name, value, speed) => {
     // loop through all skinnedMeshes
@@ -52,6 +55,16 @@ export function Avatar(props) {
   }, []);
 
   useFrame(() => {
+    Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
+      const mapping = facialExpressions[facialExpression];
+
+      if (mapping && mapping[key]) {
+        lerpMorphTarget(key, mapping[key], 0.1);
+      } else {
+        lerpMorphTarget(key, 0, 0.1);
+      }
+    });
+
     lerpMorphTarget("eyeBlinkLeft", blink ? 1 : 0, 0.1);
     lerpMorphTarget("eyeBlinkRight", blink ? 1 : 0, 0.1);
   });
@@ -62,6 +75,11 @@ export function Avatar(props) {
       value: animation,
       options: animations.map((item) => item.name),
       onChange: (v) => setAnimation(v),
+    },
+    "얼굴 표정": {
+      value: facialExpression,
+      options: Object.keys(facialExpressions),
+      onChange: (value) => setFacialExpression(value),
     },
   });
 
