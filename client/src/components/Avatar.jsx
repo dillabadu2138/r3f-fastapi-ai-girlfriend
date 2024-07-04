@@ -1,20 +1,37 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
-import { useControls } from "leva";
+import { useFrame } from "@react-three/fiber";
+import { button, useControls } from "leva";
 
 export function Avatar(props) {
-  const { nodes, materials } = useGLTF("/models/Girlfriend.glb");
+  const { nodes, materials, scene } = useGLTF("/models/Girlfriend.glb");
   const { animations } = useGLTF("/models/animations.glb");
   const group = useRef();
   const { actions } = useAnimations(animations, group);
 
   const [animation, setAnimation] = useState("Standing Idle");
+  const [eyeBlinkLeft, setEyeBlinkLeft] = useState(false);
+  const [eyeBlinkRight, setEyeBlinkRight] = useState(false);
 
   useEffect(() => {
     actions[animation].reset().fadeIn(0.5).play();
 
     return () => actions[animation].fadeOut(0.5);
   }, [animation]);
+
+  useFrame(() => {
+    // loop through all skinnedMeshes and update the morphTargetInfluences
+    scene.traverse((child) => {
+      if (child.isSkinnedMesh && child.morphTargetDictionary) {
+        child.morphTargetInfluences[
+          child.morphTargetDictionary["eyeBlinkLeft"]
+        ] = eyeBlinkLeft ? 1 : 0;
+        child.morphTargetInfluences[
+          child.morphTargetDictionary["eyeBlinkRight"]
+        ] = eyeBlinkRight ? 1 : 0;
+      }
+    });
+  });
 
   // leva UI
   useControls({
@@ -23,6 +40,16 @@ export function Avatar(props) {
       options: animations.map((item) => item.name),
       onChange: (v) => setAnimation(v),
     },
+    "왼쪽 윙크": button(() => {
+      setEyeBlinkLeft(true);
+
+      setTimeout(() => setEyeBlinkLeft(false), 500);
+    }),
+    "오른쪽 윙크": button(() => {
+      setEyeBlinkRight(true);
+
+      setTimeout(() => setEyeBlinkRight(false), 500);
+    }),
   });
 
   return (
